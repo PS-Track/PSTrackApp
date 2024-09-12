@@ -14,10 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased grid grid-cols-[200px_1fr]`}
+        className="antialiased grid p-3 grid-cols-[100px_1fr] gap-4 bg-[#09090B] h-screen"
       >
-        <aside>aside</aside>
-        <main>{children}</main>
+        <aside className="bg-[#0e0e10] rounded-lg">aside</aside>
+        <main className="bg-[#0e0e10] rounded-lg">{children}</main>
       </body>
     </html>
   );
