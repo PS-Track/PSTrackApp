@@ -1,6 +1,13 @@
 'use client'
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 
@@ -110,7 +117,9 @@ export default function Home() {
               </TableHead>
             ))}
             {/** Performance **/}
-            <TableHead className="inline-flex w-28 items-center justify-center text-center">Performance</TableHead>
+            <TableHead className="inline-flex w-28 items-center justify-center text-center">
+              Performance
+            </TableHead>
           </TableRow>
         </TableHeader>
 
