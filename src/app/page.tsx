@@ -82,10 +82,12 @@ export default function Home() {
   return (
     <div className="relative overflow-auto">
       <Table className="table-fixed">
-        <TableHeader>
-          <TableRow className="flex h-20 items-center border-b border-[#2f2f2f] hover:bg-[#2f2f2f]">
+        <TableHeader className="overflow-hidden rounded-t-md">
+          <TableRow className="flex h-20 items-center overflow-hidden rounded-t-md border-b border-[#2f2f2f] hover:bg-[#2f2f2f]">
             {/** LeetCoders **/}
-            <TableHead className="inline-flex w-28 items-center justify-center text-left">LeetCoders</TableHead>
+            <TableHead className="inline-flex w-28 items-center justify-center text-left font-medium">
+              LeetCoders
+            </TableHead>
             {/** Days **/}
             {days.map(day => (
               <TableHead
