@@ -1,0 +1,7 @@
+- [ ] fix auth logic
+    - [ ] handle set session cookie on login correctly
+    - [ ] add `/callback` route to handle OAuth2 callback
+    - [ ] add `github` OAuth2 strategy
+    - [ ] add `google` OAuth2 strategy
+- [ ] make main page accessible to public users (no login required)
+- [ ] make leetcoder name a Hover Card component
