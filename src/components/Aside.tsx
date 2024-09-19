@@ -10,7 +10,7 @@ export default function Aside() {
     <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
       <a href="/">
         <Image
-          src="/logo-white.png"
+          src="/icon-white.png"
           width={60}
           height={60}
           alt=""
