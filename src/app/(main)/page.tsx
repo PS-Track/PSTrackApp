@@ -87,13 +87,14 @@ const leetCoders = [
 
 export default function Home() {
   return (
-    <Table className="table-fixed bg-[#09090B]">
+    <Table className="rounded-lg bg-[#17171799]">
       <TableHeader className="overflow-hidden rounded-t-md">
-        <TableRow className="sticky top-0 flex h-20 items-center overflow-hidden rounded-t-md border-b border-[#2f2f2f] hover:bg-[#2f2f2f]">
+        <TableRow className="sticky top-0 flex h-20 items-center overflow-hidden rounded-t-md border-b border-[#2f2f2f] hover:overflow-hidden hover:bg-[#2f2f2f]">
           {/** LeetCoders **/}
           <TableHead className="inline-flex w-28 items-center justify-center text-left font-medium">
             LeetCoders
           </TableHead>
+
           {/** Days **/}
           {days.map(day => (
             <TableHead
@@ -107,11 +108,12 @@ export default function Home() {
                   href={day.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-500"
+                  className="text-blue-500 underline"
                 >
                   {`${day.problemNumber}`}
                 </a>
               </p>
+
               <Badge className="ml-1">{day.topic}</Badge>
             </TableHead>
           ))}
@@ -137,8 +139,9 @@ export default function Home() {
             ))}
           </TableRow>
         ))}
+
         {/** Performance **/}
-        <TableRow className="sticky bottom-0 flex h-12 overflow-hidden rounded-b-md border-t-2 border-[#2f2f2f] bg-[#1f1f1f]">
+        <TableRow className="sticky bottom-0 flex h-12 overflow-hidden rounded-b-md border-t-2 border-[#2f2f2f] bg-[#1f1f1f] hover:overflow-hidden hover:bg-[#2f2f2f]">
           <TableCell className="inline-flex w-28 items-center text-left">Total</TableCell>
           {days.map(day => (
             <TableCell

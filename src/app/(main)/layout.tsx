@@ -3,9 +3,10 @@ import Aside from '@/components/Aside'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="grid h-screen grid-cols-[70px_1fr] gap-4 bg-[#09090B] p-2">
+    <main className="grid h-screen grid-cols-[70px_1fr] overflow-hidden bg-[#09090b]">
       <Aside />
-      {children}
+
+      <div className="overflow-scroll py-3 pr-3">{children}</div>
     </main>
   )
 }
