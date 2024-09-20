@@ -2,11 +2,11 @@ import { useForm } from 'react-hook-form'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
 
+import { useToast } from '@/hooks/use-toast'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { useToast } from '@/hooks/use-toast'
 
 type FormData = {
   email: string
@@ -14,7 +14,7 @@ type FormData = {
   repeatPassword: string
 }
 
-export default function RegisterTab() {
+export default function SignUpTab() {
   const toaster = useToast()
   const { handleRegisterViaEmailAndPassword, isLoading } = useAuthHook()
 
