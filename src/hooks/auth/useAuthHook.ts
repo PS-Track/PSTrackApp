@@ -1,7 +1,11 @@
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { logoutAsync, siginUpWithEmailAndPasswordAsync } from '@/store/slices/authSlice'
+import {
+  loginViaEmailAndPasswordAsync,
+  logoutAsync,
+  siginUpWithEmailAndPasswordAsync,
+} from '@/store/slices/authSlice'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -11,7 +15,7 @@ export const useAuthHook = () => {
   const isLoading = useAppSelector(state => state.auth.isLoading)
   const error = useAppSelector(state => state.auth.error)
 
-  const handleRegisterViaEmailAndPassword = async (email: string, password: string) => {
+  const handleRegister = async (email: string, password: string) => {
     const res = await dispatch(
       siginUpWithEmailAndPasswordAsync({
         email,
@@ -26,6 +30,23 @@ export const useAuthHook = () => {
     }
   }
 
+  const handleLoginViaEmailAndPassword = async (email: string, password: string) => {
+    console.log('dispatching loginViaEmailAndPasswordAsync', email, password)
+    const res = await dispatch(
+      loginViaEmailAndPasswordAsync({
+        email,
+        password,
+      })
+    )
+
+    if (loginViaEmailAndPasswordAsync.fulfilled.match(res)) {
+      console.log('loginViaEmailAndPasswordAsync.fulfilled', res.payload.user)
+      router.push('/')
+    } else if (loginViaEmailAndPasswordAsync.rejected.match(res)) {
+      throw new Error(res.error.message)
+    }
+  }
+
   const handleLogOut = async () => {
     await dispatch(logoutAsync())
     router.push('/auth')
@@ -35,7 +56,8 @@ export const useAuthHook = () => {
     user,
     isLoading,
     error,
-    handleRegisterViaEmailAndPassword,
+    handleRegister,
+    handleLoginViaEmailAndPassword,
     handleLogOut,
   }
 

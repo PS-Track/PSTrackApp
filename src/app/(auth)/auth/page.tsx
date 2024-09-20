@@ -2,11 +2,9 @@
 
 import Image from 'next/image'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import SignUpTab from '@/app/(auth)/_components/SignUpTab'
 import LogInTab from '@/app/(auth)/_components/LogInTab'
-
-// todo: handle login with email not registered
+import SignUpTab from '@/app/(auth)/_components/SignUpTab'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function AuthPage() {
   return (

@@ -17,6 +17,23 @@ export async function signUpViaEmailAndPassword(email: string, password: string)
   return { data }
 }
 
+/**
+ * Log in a user with their email and password.
+ * @param email The user's email.
+ * @param password The user's password.
+ **/
+export async function loginViaEmailAndPassword(email: string, password: string) {
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error) throw error
+
+  return { data }
+}
+
+/**
+ * Log out the currently authenticated user.
+ **/
 export async function logOut() {
   const supabase = createClient()
 

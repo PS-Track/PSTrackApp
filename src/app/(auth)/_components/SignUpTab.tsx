@@ -16,7 +16,7 @@ type FormData = {
 
 export default function SignUpTab() {
   const toaster = useToast()
-  const { handleRegisterViaEmailAndPassword, isLoading } = useAuthHook()
+  const { handleRegister, isLoading } = useAuthHook()
 
   const {
     register,
@@ -27,7 +27,7 @@ export default function SignUpTab() {
 
   const onRegister = async (data: FormData) => {
     try {
-      await handleRegisterViaEmailAndPassword(data.email, data.password)
+      await handleRegister(data.email, data.password)
     } catch (error) {
       toaster.toast({
         variant: 'destructive',
@@ -54,7 +54,6 @@ export default function SignUpTab() {
             </Label>
             <Input
               id="email"
-              placeholder="example@email.com"
               className="border-[#27272a] text-stone-300"
               {...register('email', { required: 'Email is required' })}
             />
