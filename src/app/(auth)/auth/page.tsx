@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import { useState } from 'react'
 import { HiEye, HiEyeOff } from 'react-icons/hi'
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FaGithub, FaGoogle } from 'react-icons/fa6'
+import RegisterTab from '@/app/(auth)/_components/RegisterTab'
 
 // todo: handle login with email not registered
 
@@ -17,29 +19,6 @@ export default function AuthPage() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-
-  // const [isLoading, setIsLoading] = useState(false)
-  // const { handleLoginViaMagicLink } = useAuthHook()
-  //
-  // async function onSubmit(event: SyntheticEvent) {
-  //   event.preventDefault()
-  //   setIsLoading(true)
-  //
-  //   const target = event.target as typeof event.target & {
-  //     email: { value: string }
-  //   }
-  //   const email = target.email.value
-  //
-  //   try {
-  //     await handleLoginViaMagicLink(email)
-  //     // You might want to show a success message or redirect here
-  //   } catch (error) {
-  //     // Handle error (e.g., show error message)
-  //     console.error('Login failed:', error)
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }
 
   return (
     <Tabs
@@ -155,58 +134,7 @@ export default function AuthPage() {
       </TabsContent>
 
       <TabsContent value="signup">
-        <Card className="border-[#27272a] bg-transparent">
-          <CardContent className="space-y-2 pt-6">
-            <div className="space-y-1">
-              <Label
-                htmlFor="email"
-                className="text-stone-300"
-              >
-                Email
-              </Label>
-              <Input
-                id="email"
-                placeholder="example@email.com"
-                className="border-[#27272a] text-stone-300"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label
-                htmlFor="password"
-                className="text-stone-300"
-              >
-                Password
-              </Label>
-              <Input
-                id="password"
-                className="border-[#27272a] text-stone-300"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label
-                htmlFor="password"
-                className="text-stone-300"
-              >
-                Password
-              </Label>
-              <Input
-                id="password"
-                className="border-[#27272a] text-stone-300"
-              />
-            </div>
-          </CardContent>
-
-          <CardFooter className="flex flex-col gap-4">
-            <Button
-              className="w-full"
-              variant="default"
-            >
-              Signup
-            </Button>
-          </CardFooter>
-        </Card>
+        <RegisterTab />
       </TabsContent>
     </Tabs>
   )

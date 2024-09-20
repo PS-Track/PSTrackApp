@@ -1,10 +1,16 @@
+'use client'
+
 import Image from 'next/image'
 import { HiLogin } from 'react-icons/hi'
-import { Button } from '@/components/ui/button'
 import { CiUser } from 'react-icons/ci'
 
+import { Button } from '@/components/ui/button'
+import { useAuthHook } from '@/hooks/auth/useAuthHook'
+import { useRouter } from 'next/navigation'
+
 export default function Aside() {
-  const user = true
+  const router = useRouter()
+  const { user, isLoading } = useAuthHook()
 
   return (
     <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
@@ -19,7 +25,7 @@ export default function Aside() {
       </a>
 
       <div className="flex items-center justify-center">
-        {user ? (
+        {!!user ? (
           <Button
             size="sm"
             variant="outline"
@@ -32,6 +38,8 @@ export default function Aside() {
             size="sm"
             variant="outline"
             className="bg-transparent"
+            onClick={() => router.push('/auth')}
+            disabled={isLoading}
           >
             <HiLogin size="15" />
           </Button>

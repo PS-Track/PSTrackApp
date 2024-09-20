@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Session, User } from '@supabase/supabase-js'
 
-import { loginViaMagicLink, logOut } from '@/db/auth.service'
+import { loginViaMagicLink, logOut, signUpViaEmailAndPassword } from '@/db/auth.service'
 
 interface AuthState {
   user: User | null
@@ -10,6 +10,14 @@ interface AuthState {
   isLoadingOtp: boolean
   error: string | null
 }
+
+export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
+  'auth/siginUpWithEmailAndPassword',
+  async ({ email, password }: { email: string; password: string }) => {
+    const { data } = await signUpViaEmailAndPassword(email, password)
+    return { user: data?.user, session: data?.session }
+  }
+)
 
 export const loginViaMagicLinkAsync = createAsyncThunk(
   'auth/loginViaMagicLink',
@@ -45,6 +53,20 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      /** Sign Up Via Email And Password */
+      .addCase(siginUpWithEmailAndPasswordAsync.pending, state => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(siginUpWithEmailAndPasswordAsync.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.user = action.payload.user
+        state.session = action.payload.session
+      })
+      .addCase(siginUpWithEmailAndPasswordAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message as string
+      })
       /** LogIn Via Magic Link */
       .addCase(loginViaMagicLinkAsync.pending, state => {
         state.isLoading = true
