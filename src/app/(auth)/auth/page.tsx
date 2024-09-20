@@ -8,6 +8,9 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { FaGithub, FaGoogle } from 'react-icons/fa6'
+
+// todo: handle login with email not registered
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -70,7 +73,7 @@ export default function AuthPage() {
               </Label>
               <Input
                 id="email"
-                placeholder="m@example.com"
+                placeholder="example@email.com"
                 className="border-[#27272a] text-stone-300"
               />
             </div>
@@ -118,12 +121,34 @@ export default function AuthPage() {
               </Label>
             </div>
           </CardContent>
-          <CardFooter>
+
+          <CardFooter className="flex flex-col gap-4">
             <Button
               className="w-full"
               variant="default"
             >
               Login
+            </Button>
+
+            <div className="flex w-full items-center justify-center space-x-2">
+              <hr className="w-full border-stone-300" />
+              <span className="text-nowrap text-xs uppercase text-stone-300">Or continue with</span>
+              <hr className="w-full border-stone-300" />
+            </div>
+            <Button
+              className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+              variant="outline"
+            >
+              <FaGoogle />
+              Continue with Google
+            </Button>
+
+            <Button
+              className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+              variant="outline"
+            >
+              <FaGithub />
+              <span>Continue with GitHub</span>
             </Button>
           </CardFooter>
         </Card>
@@ -134,33 +159,52 @@ export default function AuthPage() {
           <CardContent className="space-y-2 pt-6">
             <div className="space-y-1">
               <Label
-                htmlFor="name"
+                htmlFor="email"
                 className="text-stone-300"
               >
-                Name
+                Email
               </Label>
               <Input
-                id="name"
-                defaultValue="Pedro Duarte"
+                id="email"
+                placeholder="example@email.com"
                 className="border-[#27272a] text-stone-300"
               />
             </div>
+
             <div className="space-y-1">
               <Label
-                htmlFor="username"
+                htmlFor="password"
                 className="text-stone-300"
               >
-                Username
+                Password
               </Label>
               <Input
-                id="username"
-                defaultValue="@peduarte"
+                id="password"
+                className="border-[#27272a] text-stone-300"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label
+                htmlFor="password"
+                className="text-stone-300"
+              >
+                Password
+              </Label>
+              <Input
+                id="password"
                 className="border-[#27272a] text-stone-300"
               />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button variant="default">Login</Button>
+
+          <CardFooter className="flex flex-col gap-4">
+            <Button
+              className="w-full"
+              variant="default"
+            >
+              Signup
+            </Button>
           </CardFooter>
         </Card>
       </TabsContent>
