@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
+
 import {
   loginViaEmailAndPasswordAsync,
   logoutAsync,
@@ -15,7 +16,6 @@ import { UserMetadataI } from '@/types/User.interface'
 
 export const useAuthHook = () => {
   const router = useRouter()
-
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.auth.user)
   const isLoading = useAppSelector(state => state.auth.isLoading)
@@ -36,6 +36,8 @@ export const useAuthHook = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       dispatch(setSession(session))
       dispatch(setUser(session?.user ?? null))
+      if (session?.user.user_metadata.is_first_login) {
+      }
     })
 
     hasSetupListener.current = true

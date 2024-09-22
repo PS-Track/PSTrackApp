@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // todo add theme provider from tailwind
   return (
     <html lang="en">
       <Providers>

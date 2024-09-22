@@ -14,14 +14,11 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { firstLoginFormSchema } from '@/validation/firstLoginForm.schema'
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
+import { useDialogHook } from '@/hooks/useDialogHook'
 
-interface ProfileDialogProps {
-  isOpen: boolean
-  onClose: () => void
-}
-
-export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
+export default function ProfileDialog() {
   const { user, isLoading } = useAuthHook()
+  const { isOpen, openDialog, closeDialog } = useDialogHook()
   const isEmailProvided = user?.app_metadata?.provider === 'email' || false
 
   const {
@@ -41,15 +38,16 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
     // todo validate username is not used by other users
     console.log(values)
     console.log(user)
-    onClose()
+
+    closeDialog()
   }
 
-  if (isLoading) return null
+  if (isLoading) return null // todo add loading spinner
 
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={onClose}
+      onOpenChange={open => (open ? openDialog() : closeDialog())}
     >
       <DialogContent
         className="border-[#27272a] bg-[#09090b] sm:max-w-[425px]"

@@ -1,5 +1,7 @@
 'use client'
 
+import { useDialogHook } from '@/hooks/useDialogHook'
+
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -11,8 +13,6 @@ import {
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
-import { useDialog } from '@/hooks/useDialog'
-import ProfileDialog from '@/components/ProfileDialog'
 
 // todo: make the names as Hover Card component
 
@@ -63,21 +63,11 @@ const days = [
 const leetCoders = ['@Hüsam', '@Kholoud', '@Majd', '@Mohammed', '@Nour', '@Omar', '@Yazan', '@Sara']
 
 export default function Home() {
-  const { isOpen, closeDialog, openDialog } = useDialog()
+  const { openDialog } = useDialogHook()
 
   return (
     <>
-      <Button
-        variant="outline"
-        onClick={openDialog}
-      >
-        Edit Profile
-      </Button>
-
-      <ProfileDialog
-        onClose={closeDialog}
-        isOpen={isOpen}
-      />
+      <Button onClick={openDialog}>Open Profile Dialog</Button>
 
       <Table className="rounded-lg bg-[#17171799]">
         <TableHeader className="overflow-hidden rounded-t-md">
