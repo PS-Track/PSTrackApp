@@ -31,6 +31,8 @@ export default function ProfileDialog() {
       first_name: '',
       last_name: '',
       email: isEmailProvided ? user?.email : '', // todo test this
+      // todo: add twitter, github accounts
+      // todo: add bio
     },
   })
 
