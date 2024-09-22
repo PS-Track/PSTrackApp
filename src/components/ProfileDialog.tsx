@@ -1,9 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useForm } from 'react-hook-form'
 
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { firstLoginFormSchema } from '@/validation/firstLoginForm.schema'
+import { useAuthHook } from '@/hooks/auth/useAuthHook'
 
 interface ProfileDialogProps {
   isOpen: boolean
@@ -19,6 +21,9 @@ interface ProfileDialogProps {
 }
 
 export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
+  const { user, isLoading } = useAuthHook()
+  const isEmailProvided = user?.app_metadata?.provider === 'email' || false
+
   const {
     register,
     handleSubmit,
@@ -28,14 +33,18 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
       username: '',
       first_name: '',
       last_name: '',
+      email: isEmailProvided ? user?.email : '', // todo test this
     },
   })
 
   function onSubmit(values: z.infer<typeof firstLoginFormSchema>) {
     // todo validate username is not used by other users
     console.log(values)
+    console.log(user)
     onClose()
   }
+
+  if (isLoading) return null
 
   return (
     <Dialog
@@ -50,7 +59,11 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
         onPointerDownOutside={event => event.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Continue setting up your profile</DialogTitle>
+          <DialogTitle>Welcome to the PSTrack app 🎉</DialogTitle>
+          <DialogDescription className="text-sm">
+            {/*make it shorter*/}
+            Please fill in your details to complete your profile.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,10 +84,11 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
               </div>
 
               <div>
-                <Label htmlFor="last_name">First Name</Label>
+                <Label htmlFor="last_name">Last Name</Label>
                 <Input
                   id="last_name"
                   className="col-span-3 border-[#27272a]"
+                  {...register('last_name', { required: 'Last name is required' })}
                 />
                 {errors.last_name && (
                   <span className="col-span-4 text-center text-sm text-red-500">
@@ -98,6 +112,22 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
                 </span>
               )}
             </div>
+
+            {!isEmailProvided && (
+              <div className="items-center gap-4">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  className="col-span-3 border-[#27272a]"
+                  {...register('email', { required: 'Email is required' })}
+                />
+                {errors.email && (
+                  <span className="col-span-4 text-center text-sm text-red-500">
+                    {errors.email.message}
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Add more fields */}
           </div>

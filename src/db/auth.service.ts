@@ -2,7 +2,8 @@
 
 import { createClient } from '@/db/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { UserAttributes } from '@supabase/auth-js'
+
+import { UserMetadataI } from '@/types/User.interface'
 
 /**
  * Sign up a new user with their email and password.
@@ -45,19 +46,25 @@ export async function logOut() {
   revalidatePath('/', 'layout')
 }
 
-// interface UpdateUserInfoData {
-//   _email?: string
-//   _phone_number?: string
-//   _full_name?: string
-//   _first_name?: string
-//   _last_name?: string
-//   _avatar_url?: string
-// }
+/**
+ * Update the user metadata for a user.
+ * @param userId The user's ID.
+ * @param userMetaData The user metadata to update.
+ **/
+export async function updateUserMetadata(userId: string, userMetaData: UserMetadataI) {
+  const supabase = createClient()
+  const full_name = `${userMetaData.first_name ?? ''} ${userMetaData.last_name ?? ''}`.trim()
 
-// export async function updateUserInfo({ _first_name, _last_name, _avatar_url }: UpdateUserInfoData) {
-//   const supabase = createClient()
-//   let updateData: UserAttributes = {}
-// }
+  const { data, error } = await supabase.auth.admin.updateUserById(userId, {
+    user_metadata: {
+      ...userMetaData,
+      full_name: full_name || undefined,
+    },
+  })
+  if (error) throw error
+
+  return { data }
+}
 
 export async function loginViaMagicLink(email: string) {
   const supabase = createClient()

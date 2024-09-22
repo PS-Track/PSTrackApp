@@ -13,4 +13,5 @@ export const firstLoginFormSchema = z.object({
     .string()
     .min(3, 'Last name must be at least 3 characters')
     .max(20, 'Last name must be at most 20 characters'),
+  email: z.string().email('Invalid email address'),
 })

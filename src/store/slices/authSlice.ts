@@ -6,7 +6,9 @@ import {
   loginViaMagicLink,
   logOut,
   signUpViaEmailAndPassword,
+  updateUserMetadata,
 } from '@/db/auth.service'
+import { UserMetadataI } from '@/types/User.interface'
 
 interface AuthState {
   user: User | null
@@ -43,6 +45,37 @@ export const loginViaMagicLinkAsync = createAsyncThunk(
 export const logoutAsync = createAsyncThunk('auth/logout', async () => {
   await logOut()
 })
+
+export const updateUserInfoAsync = createAsyncThunk<
+  unknown,
+  {
+    userId: string
+    userInfo: UserMetadataI
+  },
+  {
+    rejectValue: string
+  }
+>(
+  'auth/updateUserInfo',
+  async (
+    {
+      userId,
+      userInfo,
+    }: {
+      userId: string
+      userInfo: UserMetadataI
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data } = await updateUserMetadata(userId, userInfo)
+      return data
+    } catch (error) {
+      if (error instanceof Error) return rejectWithValue(error.message)
+      return rejectWithValue('An unknown error occurred')
+    }
+  }
+)
 
 const authSlice = createSlice({
   name: 'auth',
@@ -93,6 +126,18 @@ const authSlice = createSlice({
       .addCase(loginViaEmailAndPasswordAsync.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.error.message as string
+      })
+      /** Update User Info */
+      .addCase(updateUserInfoAsync.pending, state => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(updateUserInfoAsync.fulfilled, state => {
+        state.isLoading = false
+      })
+      .addCase(updateUserInfoAsync.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
       })
       /** LogIn Via Magic Link */
       .addCase(loginViaMagicLinkAsync.pending, state => {

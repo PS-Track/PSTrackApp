@@ -8,8 +8,10 @@ import {
   setSession,
   setUser,
   siginUpWithEmailAndPasswordAsync,
+  updateUserInfoAsync,
 } from '@/store/slices/authSlice'
 import { createClient } from '@/db/supabase/client'
+import { UserMetadataI } from '@/types/User.interface'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -74,6 +76,10 @@ export const useAuthHook = () => {
   const handleLogOut = async () => {
     await dispatch(logoutAsync())
     router.push('/auth')
+  }
+
+  const handleUpdateUserMetadata = async (userId: string, userMetaData: UserMetadataI) => {
+    await dispatch(updateUserInfoAsync({ userId, userInfo: userMetaData }))
   }
 
   return {
