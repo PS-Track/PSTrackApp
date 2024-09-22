@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useDialogHook } from '@/hooks/generic/useDialogHook'
+import { UserMetadataI } from '@/types/User.interface'
 
 import {
   loginViaEmailAndPasswordAsync,
@@ -12,8 +14,6 @@ import {
   updateUserInfoAsync,
 } from '@/store/slices/authSlice'
 import { createClient } from '@/db/supabase/client'
-import { UserMetadataI } from '@/types/User.interface'
-import { useDialogHook } from '@/hooks/useDialogHook'
 
 export const useAuthHook = () => {
   const router = useRouter()

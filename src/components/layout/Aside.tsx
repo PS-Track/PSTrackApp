@@ -4,8 +4,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { HiLogin } from 'react-icons/hi'
 
-import { Button } from '@/components/ui/button'
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
+
+import { Button } from '@/components/ui/button'
 import { UserMenu } from '@/components/UserMenu'
 
 export default function Aside() {

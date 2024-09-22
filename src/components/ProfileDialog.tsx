@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 
+import { useAuthHook } from '@/hooks/auth/useAuthHook'
+import { useDialogHook } from '@/hooks/generic/useDialogHook'
+import { firstLoginFormSchema } from '@/validation/firstLoginForm.schema'
+
 import {
   Dialog,
   DialogContent,
@@ -12,9 +16,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { firstLoginFormSchema } from '@/validation/firstLoginForm.schema'
-import { useAuthHook } from '@/hooks/auth/useAuthHook'
-import { useDialogHook } from '@/hooks/useDialogHook'
 
 export default function ProfileDialog() {
   const { user, isLoading } = useAuthHook()

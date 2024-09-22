@@ -1,5 +1,7 @@
 import Image from 'next/image'
 
+import { useAuthHook } from '@/hooks/auth/useAuthHook'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,7 +13,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useAuthHook } from '@/hooks/auth/useAuthHook'
 
 export function UserMenu() {
   const { handleLogOut, isLoading } = useAuthHook()
