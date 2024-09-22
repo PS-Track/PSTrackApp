@@ -23,25 +23,19 @@ export const useAuthHook = () => {
   useEffect(() => {
     if (hasSetupListener.current) return
 
-    let supabase
+    const supabase = createClient()
 
-    async function setupSupabase() {
-      const { createClient } = await import('@/db/supabase/client')
-      supabase = createClient()
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        dispatch(setSession(session))
-        dispatch(setUser(session?.user ?? null))
-      })
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+    supabase.auth.onAuthStateChange((_event, session) => {
       dispatch(setSession(session))
       dispatch(setUser(session?.user ?? null))
-    }
+      // todo handle first login
+    })
 
-    setupSupabase()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      dispatch(setSession(session))
+      dispatch(setUser(session?.user ?? null))
+    })
+
     hasSetupListener.current = true
   }, [dispatch])
 
