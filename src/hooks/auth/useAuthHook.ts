@@ -13,6 +13,7 @@ import {
 } from '@/store/slices/authSlice'
 import { createClient } from '@/db/supabase/client'
 import { UserMetadataI } from '@/types/User.interface'
+import { useDialogHook } from '@/hooks/useDialogHook'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -20,6 +21,7 @@ export const useAuthHook = () => {
   const user = useAppSelector(state => state.auth.user)
   const isLoading = useAppSelector(state => state.auth.isLoading)
   const error = useAppSelector(state => state.auth.error)
+  const { openDialog } = useDialogHook()
 
   const hasSetupListener = useRef(false)
   useEffect(() => {
@@ -28,20 +30,29 @@ export const useAuthHook = () => {
     const supabase = createClient()
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('onAuthStateChange User metadata:', session?.user?.user_metadata)
       dispatch(setSession(session))
       dispatch(setUser(session?.user ?? null))
-      // todo handle first login
+
+      if (session?.user?.user_metadata.is_first_login) {
+        console.log('onAuthStateChange is_first_login')
+        openDialog()
+      }
     })
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('getSession User metadata:', session?.user?.user_metadata)
       dispatch(setSession(session))
       dispatch(setUser(session?.user ?? null))
-      if (session?.user.user_metadata.is_first_login) {
+
+      if (session?.user?.user_metadata.is_first_login) {
+        console.log('getSession is_first_login')
+        openDialog()
       }
     })
 
     hasSetupListener.current = true
-  }, [dispatch])
+  }, [dispatch, openDialog])
 
   const handleRegister = async (email: string, password: string) => {
     const res = await dispatch(
@@ -91,6 +102,7 @@ export const useAuthHook = () => {
     handleRegister,
     handleLoginViaEmailAndPassword,
     handleLogOut,
+    handleUpdateUserMetadata,
   }
 
   // const handleLoginViaMagicLink = async (email: string) => {
