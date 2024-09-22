@@ -1,11 +1,15 @@
+import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   loginViaEmailAndPasswordAsync,
   logoutAsync,
+  setSession,
+  setUser,
   siginUpWithEmailAndPasswordAsync,
 } from '@/store/slices/authSlice'
+import { createClient } from '@/db/supabase/client'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -14,6 +18,32 @@ export const useAuthHook = () => {
   const user = useAppSelector(state => state.auth.user)
   const isLoading = useAppSelector(state => state.auth.isLoading)
   const error = useAppSelector(state => state.auth.error)
+
+  const hasSetupListener = useRef(false)
+  useEffect(() => {
+    if (hasSetupListener.current) return
+
+    let supabase
+
+    async function setupSupabase() {
+      const { createClient } = await import('@/db/supabase/client')
+      supabase = createClient()
+
+      supabase.auth.onAuthStateChange((_event, session) => {
+        dispatch(setSession(session))
+        dispatch(setUser(session?.user ?? null))
+      })
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      dispatch(setSession(session))
+      dispatch(setUser(session?.user ?? null))
+    }
+
+    setupSupabase()
+    hasSetupListener.current = true
+  }, [dispatch])
 
   const handleRegister = async (email: string, password: string) => {
     const res = await dispatch(

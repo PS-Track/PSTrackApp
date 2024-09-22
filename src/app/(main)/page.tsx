@@ -57,33 +57,7 @@ const days = [
     topic: 'Math',
   },
 ]
-const leetCoders = [
-  '@Hüsam',
-  '@Kholoud',
-  '@Majd',
-  '@Mohammed',
-  '@Nour',
-  '@Omar',
-  '@Sara',
-  '@Yazan',
-  '@Yazan',
-  '@Yazan',
-  '@Hüsam',
-  '@Kholoud',
-  '@Majd',
-  '@Yazan',
-  '@Yazan',
-  '@Yazan',
-  '@Hüsam',
-  '@Kholoud',
-  '@Mohammed',
-  '@Nour',
-  '@Omar',
-  '@Sara',
-  '@Yazan',
-  '@Yazan',
-  '@Yazan',
-]
+const leetCoders = ['@Hüsam', '@Kholoud', '@Majd', '@Mohammed', '@Nour', '@Omar', '@Yazan', '@Sara']
 
 export default function Home() {
   return (
