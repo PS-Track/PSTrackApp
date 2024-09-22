@@ -7,6 +7,7 @@ import { CiUser } from 'react-icons/ci'
 import { Button } from '@/components/ui/button'
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
 import { useRouter } from 'next/navigation'
+import { UserMenu } from '@/components/UserMenu'
 
 export default function Aside() {
   const router = useRouter()
@@ -14,7 +15,7 @@ export default function Aside() {
 
   return (
     <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
-      <a href="/">
+      <a href="/pstrackapp/public">
         <Image
           src="/icon-white.png"
           width={60}
@@ -26,13 +27,7 @@ export default function Aside() {
 
       <div className="flex items-center justify-center">
         {!!user ? (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-transparent"
-          >
-            <CiUser size="15" />
-          </Button>
+          <UserMenu />
         ) : (
           <Button
             size="sm"
