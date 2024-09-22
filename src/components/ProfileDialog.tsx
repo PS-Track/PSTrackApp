@@ -26,6 +26,8 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
   } = useForm<z.infer<typeof firstLoginFormSchema>>({
     defaultValues: {
       username: '',
+      first_name: '',
+      last_name: '',
     },
   })
 
@@ -53,13 +55,37 @@ export default function ProfileDialog({ isOpen, onClose }: ProfileDialogProps) {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label
-                htmlFor="username"
-                className="text-right"
-              >
-                Username
-              </Label>
+            <div className="grid grid-cols-2 items-center gap-4">
+              <div>
+                <Label htmlFor="first_name">First Name</Label>
+                <Input
+                  id="first_name"
+                  className="col-span-3 border-[#27272a]"
+                  {...register('first_name', { required: 'First name is required' })}
+                />
+                {errors.first_name && (
+                  <span className="col-span-4 text-center text-sm text-red-500">
+                    {errors.first_name.message}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="last_name">First Name</Label>
+                <Input
+                  id="last_name"
+                  className="col-span-3 border-[#27272a]"
+                />
+                {errors.last_name && (
+                  <span className="col-span-4 text-center text-sm text-red-500">
+                    {errors.last_name.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="items-center gap-4">
+              <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 placeholder="will be displayed on the table"
