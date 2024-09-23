@@ -64,13 +64,10 @@ export async function logOut() {
  **/
 export async function updateUserMetadata(userId: string, userMetaData: UserMetadataI) {
   const supabase = createClient()
-  const { first_name, last_name } = userMetaData
-  const full_name = `${first_name ?? ''} ${last_name ?? ''}`.trim()
 
   const { data, error } = await supabase.auth.admin.updateUserById(userId, {
     user_metadata: {
       ...userMetaData,
-      full_name: full_name || undefined,
       is_first_login: false,
     },
   })

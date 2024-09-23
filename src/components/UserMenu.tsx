@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function UserMenu() {
-  const { handleLogOut, isLoading } = useAuthHook()
+  const { user, handleLogOut, isLoading } = useAuthHook()
 
   return (
     <DropdownMenu>
@@ -35,7 +35,7 @@ export function UserMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>Hi, {user?.user_metadata.first_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
