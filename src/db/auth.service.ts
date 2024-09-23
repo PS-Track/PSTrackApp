@@ -47,6 +47,20 @@ export async function loginViaEmailAndPassword(email: string, password: string) 
   return { data }
 }
 
+export async function loginViaGithub() {
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: process.env.NEXT_PUBLIC_BASE_URL,
+    },
+  })
+  if (error) throw error
+
+  return { data }
+}
+
 /**
  * Log out the currently authenticated user.
  **/

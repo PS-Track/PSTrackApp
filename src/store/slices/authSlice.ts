@@ -9,7 +9,6 @@ import {
   updateUserMetadata,
 } from '@/db/auth.service'
 import { UserMetadataI } from '@/types/User.interface'
-import { createClient } from '@/db/supabase/client'
 
 interface AuthState {
   user: User | null
