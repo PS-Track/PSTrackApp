@@ -30,12 +30,10 @@ export const useAuthHook = () => {
     const supabase = createClient()
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('onAuthStateChange User metadata:', session?.user?.user_metadata)
       dispatch(setSession(session))
       dispatch(setUser(session?.user ?? null))
 
       if (session?.user?.user_metadata.is_first_login) {
-        console.log('onAuthStateChange is_first_login')
         openDialog()
       }
     })
@@ -46,7 +44,6 @@ export const useAuthHook = () => {
       dispatch(setUser(session?.user ?? null))
 
       if (session?.user?.user_metadata.is_first_login) {
-        console.log('getSession is_first_login')
         openDialog()
       }
     })
@@ -63,6 +60,9 @@ export const useAuthHook = () => {
     )
 
     if (siginUpWithEmailAndPasswordAsync.fulfilled.match(res)) {
+      if (res.payload.user) {
+        openDialog()
+      }
       router.push('/')
     } else if (siginUpWithEmailAndPasswordAsync.rejected.match(res)) {
       throw new Error(res.error.message)
