@@ -21,7 +21,7 @@ export const useAuthHook = () => {
   const user = useAppSelector(state => state.auth.user)
   const isLoading = useAppSelector(state => state.auth.isLoading)
   const error = useAppSelector(state => state.auth.error)
-  const { openDialog } = useDialogHook()
+  const { openDialog, closeDialog } = useDialogHook()
 
   const hasSetupListener = useRef(false)
   useEffect(() => {
@@ -29,27 +29,48 @@ export const useAuthHook = () => {
 
     const supabase = createClient()
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       dispatch(setSession(session))
-      dispatch(setUser(session?.user ?? null))
-
-      if (session?.user?.user_metadata.is_first_login) {
-        openDialog()
+      if (session) {
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser()
+        if (error) {
+          console.error('Error fetching user:', error)
+        } else {
+          dispatch(setUser(user ?? null))
+        }
+      } else {
+        dispatch(setUser(null))
       }
     })
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('getSession User metadata:', session?.user?.user_metadata)
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       dispatch(setSession(session))
-      dispatch(setUser(session?.user ?? null))
-
-      if (session?.user?.user_metadata.is_first_login) {
-        openDialog()
+      if (session) {
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser()
+        if (error) {
+          console.error('Error fetching user:', error)
+        } else {
+          dispatch(setUser(user ?? null))
+        }
+      } else {
+        dispatch(setUser(null))
       }
     })
 
     hasSetupListener.current = true
-  }, [dispatch, openDialog])
+    return () => authListener?.subscription?.unsubscribe()
+  }, [dispatch])
+
+  useEffect(() => {
+    if (user?.user_metadata?.is_first_login) openDialog()
+    else closeDialog()
+  }, [closeDialog, openDialog, user?.user_metadata?.is_first_login])
 
   const handleRegister = async (email: string, password: string) => {
     const res = await dispatch(
@@ -60,9 +81,6 @@ export const useAuthHook = () => {
     )
 
     if (siginUpWithEmailAndPasswordAsync.fulfilled.match(res)) {
-      if (res.payload.user) {
-        openDialog()
-      }
       router.push('/')
     } else if (siginUpWithEmailAndPasswordAsync.rejected.match(res)) {
       throw new Error(res.error.message)
@@ -70,7 +88,6 @@ export const useAuthHook = () => {
   }
 
   const handleLoginViaEmailAndPassword = async (email: string, password: string) => {
-    console.log('dispatching loginViaEmailAndPasswordAsync', email, password)
     const res = await dispatch(
       loginViaEmailAndPasswordAsync({
         email,
@@ -79,7 +96,6 @@ export const useAuthHook = () => {
     )
 
     if (loginViaEmailAndPasswordAsync.fulfilled.match(res)) {
-      console.log('loginViaEmailAndPasswordAsync.fulfilled', res.payload.user)
       router.push('/')
     } else if (loginViaEmailAndPasswordAsync.rejected.match(res)) {
       throw new Error(res.error.message)
@@ -92,7 +108,15 @@ export const useAuthHook = () => {
   }
 
   const handleUpdateUserMetadata = async (userId: string, userMetaData: UserMetadataI) => {
-    await dispatch(updateUserInfoAsync({ userId, userInfo: userMetaData }))
+    console.log('dispatching updateUserInfoAsync', userId, userMetaData)
+    await dispatch(
+      updateUserInfoAsync({
+        userId,
+        userInfo: userMetaData,
+      })
+    )
+      .unwrap()
+      .then(() => closeDialog())
   }
 
   return {
@@ -104,22 +128,4 @@ export const useAuthHook = () => {
     handleLogOut,
     handleUpdateUserMetadata,
   }
-
-  // const handleLoginViaMagicLink = async (email: string) => {
-  //   console.log('dispatching loginViaMagicLinkAsync', email)
-  //   const res = await dispatch(loginViaMagicLinkAsync({ email }))
-  //   console.log('dispatched loginViaMagicLinkAsync', res)
-  //
-  //   if (loginViaMagicLinkAsync.fulfilled.match(res)) {
-  //     dispatch(setUser(res.payload.user))
-  //     console.log('loginViaMagicLinkAsync.fulfilled', res.payload.user)
-  //   }
-  // }
-  //
-  // return {
-  //   user,
-  //   isLoading,
-  //   error,
-  //   handleLoginViaMagicLink,
-  // }
 }

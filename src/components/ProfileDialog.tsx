@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
 import { useDialogHook } from '@/hooks/generic/useDialogHook'
@@ -18,43 +20,41 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 
 export default function ProfileDialog() {
-  const { user, isLoading } = useAuthHook()
-  const { isOpen, openDialog, closeDialog } = useDialogHook()
-  const isEmailProvided = user?.app_metadata?.provider === 'email' || false
+  const { user, isLoading, handleUpdateUserMetadata } = useAuthHook()
+  const { isOpen } = useDialogHook()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<z.infer<typeof firstLoginFormSchema>>({
+    resolver: zodResolver(firstLoginFormSchema),
     defaultValues: {
       username: '',
       first_name: '',
       last_name: '',
-      email: isEmailProvided ? user?.email : '', // todo test this
-      // todo: add twitter, github accounts
-      // todo: add bio
+      email: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof firstLoginFormSchema>) {
-    // todo validate username is not used by other users
-    console.log(values)
-    console.log(user)
+  // Set the email value from the user object
+  useEffect(() => {
+    if (user?.user_metadata?.email) setValue('email', user.user_metadata.email)
+  }, [user, setValue])
 
-    closeDialog()
+  async function onSubmit(values: z.infer<typeof firstLoginFormSchema>) {
+    if (!user) return
+
+    await handleUpdateUserMetadata(user.id, { ...values })
   }
 
   if (isLoading) return null // todo add loading spinner
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={open => (open ? openDialog() : closeDialog())}
-    >
+    <Dialog open={isOpen}>
       <DialogContent
         className="border-[#27272a] bg-[#09090b] sm:max-w-[425px]"
-        // Disable the autofocus and escape key down behaviors
         onCloseAutoFocus={event => event.preventDefault()}
         onEscapeKeyDown={event => event.preventDefault()}
         onPointerDownOutside={event => event.preventDefault()}
@@ -62,7 +62,6 @@ export default function ProfileDialog() {
         <DialogHeader>
           <DialogTitle>Welcome to the PSTrack app 🎉</DialogTitle>
           <DialogDescription className="text-sm">
-            {/*make it shorter*/}
             Please fill in your details to complete your profile.
           </DialogDescription>
         </DialogHeader>
@@ -103,7 +102,7 @@ export default function ProfileDialog() {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
-                placeholder="will be displayed on the table"
+                placeholder="Will be displayed on the table"
                 className="col-span-3 border-[#27272a]"
                 {...register('username', { required: 'Username is required' })}
               />
@@ -114,26 +113,28 @@ export default function ProfileDialog() {
               )}
             </div>
 
-            {!isEmailProvided && (
-              <div className="items-center gap-4">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  className="col-span-3 border-[#27272a]"
-                  {...register('email', { required: 'Email is required' })}
-                />
-                {errors.email && (
-                  <span className="col-span-4 text-center text-sm text-red-500">
-                    {errors.email.message}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Add more fields */}
+            <div className="items-center gap-4">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                className="col-span-3 border-[#27272a]"
+                {...register('email', { required: 'Email is required' })}
+              />
+              {errors.email && (
+                <span className="col-span-4 text-center text-sm text-red-500">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
           </div>
+
           <DialogFooter>
-            <Button type="submit">Done</Button>
+            <Button
+              disabled={isLoading}
+              type="submit"
+            >
+              Done
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

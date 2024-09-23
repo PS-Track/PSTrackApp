@@ -9,6 +9,7 @@ import {
   updateUserMetadata,
 } from '@/db/auth.service'
 import { UserMetadataI } from '@/types/User.interface'
+import { createClient } from '@/db/supabase/client'
 
 interface AuthState {
   user: User | null
@@ -47,7 +48,7 @@ export const logoutAsync = createAsyncThunk('auth/logout', async () => {
 })
 
 export const updateUserInfoAsync = createAsyncThunk<
-  unknown,
+  { user: User },
   {
     userId: string
     userInfo: UserMetadataI
@@ -69,7 +70,8 @@ export const updateUserInfoAsync = createAsyncThunk<
   ) => {
     try {
       const { data } = await updateUserMetadata(userId, userInfo)
-      return data
+      setUser(data.user)
+      return { user: data.user }
     } catch (error) {
       if (error instanceof Error) return rejectWithValue(error.message)
       return rejectWithValue('An unknown error occurred')
@@ -132,8 +134,9 @@ const authSlice = createSlice({
         state.isLoading = true
         state.error = null
       })
-      .addCase(updateUserInfoAsync.fulfilled, state => {
+      .addCase(updateUserInfoAsync.fulfilled, (state, action) => {
         state.isLoading = false
+        state.user = action.payload.user
       })
       .addCase(updateUserInfoAsync.rejected, (state, action) => {
         state.isLoading = false

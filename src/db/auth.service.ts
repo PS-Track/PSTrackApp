@@ -26,6 +26,7 @@ export async function signUpViaEmailAndPassword(email: string, password: string)
 
     if (updateError) throw updateError
   }
+  console.log('signUpViaEmailAndPassword', data)
   return { data }
 }
 
@@ -63,37 +64,19 @@ export async function logOut() {
  **/
 export async function updateUserMetadata(userId: string, userMetaData: UserMetadataI) {
   const supabase = createClient()
-  const full_name = `${userMetaData.first_name ?? ''} ${userMetaData.last_name ?? ''}`.trim()
+  const { first_name, last_name } = userMetaData
+  const full_name = `${first_name ?? ''} ${last_name ?? ''}`.trim()
 
   const { data, error } = await supabase.auth.admin.updateUserById(userId, {
     user_metadata: {
       ...userMetaData,
       full_name: full_name || undefined,
-      is_first_login: true,
+      is_first_login: false,
     },
   })
   if (error) throw error
 
-  // update is_first_login field in user_metadata to false
-  if (data?.user?.id) await updateUserFirstLogin(data?.user?.id, false)
-  return { data }
-}
-
-/**
- * Update the user's first login status.
- * @param userId The user's ID.
- * @param isFirstLogin Whether the user has logged in before.
- **/
-export async function updateUserFirstLogin(userId: string, isFirstLogin: boolean) {
-  const supabase = createClient()
-
-  const { data, error } = await supabase.auth.admin.updateUserById(userId, {
-    user_metadata: {
-      is_first_login: isFirstLogin,
-    },
-  })
-  if (error) throw error
-
+  console.log('updateUserMetadata', data)
   return { data }
 }
 

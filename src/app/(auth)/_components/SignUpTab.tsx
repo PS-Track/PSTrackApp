@@ -55,6 +55,7 @@ export default function SignUpTab() {
             <Input
               id="email"
               className="border-[#27272a] text-stone-300"
+              defaultValue="husamahmud@gmail.com" /*TODO remove this line*/
               {...register('email', { required: 'Email is required' })}
             />
             {errors.email && <span className="text-red-500">{errors.email.message}</span>}
@@ -72,6 +73,7 @@ export default function SignUpTab() {
               id="password"
               type="password"
               className="border-[#27272a] text-stone-300"
+              defaultValue="123123123" /*TODO remove this line*/
               {...register('password', { required: 'Password is required' })}
             />
             {errors.password && (
@@ -91,6 +93,7 @@ export default function SignUpTab() {
               id="repeatPassword"
               type="password"
               className="border-[#27272a] text-stone-300"
+              defaultValue="123123123" /*TODO remove this line*/
               {...register('repeatPassword', {
                 required: 'Please repeat your password',
                 validate: value => value === password || 'Passwords do not match',
