@@ -1,17 +1,17 @@
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { LuLoader } from 'react-icons/lu'
 import { HiEye, HiEyeOff } from 'react-icons/hi'
 import { FaGithub, FaGoogle } from 'react-icons/fa6'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
+import { signInViaGithub } from '@/actions/handle_oauth_action'
 
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { signInViaGithub } from '@/actions/handle_oauth_action'
 
 type FormData = {
   email: string
@@ -29,6 +29,9 @@ export default function LogInTab() {
     formState: { errors },
   } = useForm<FormData>()
 
+  /**
+   * Handle login via email and password
+   **/
   const onLogin = async (data: FormData) => {
     toaster.toast({
       description: (
@@ -50,11 +53,18 @@ export default function LogInTab() {
     }
   }
 
+  /**
+   * Toggle password visibility
+   **/
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleSignInViaGithub = async () => {
+  /**
+   * Handle sign in via GitHub
+   **/
+  const handleSignInViaGithub = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     await signInViaGithub()
   }
 
@@ -141,19 +151,21 @@ export default function LogInTab() {
           <hr className="w-full border-stone-300" />
         </div>
 
-        <Button
-          className="flex w-full items-center gap-3 bg-transparent text-stone-300"
-          variant="outline"
-        >
-          <FaGoogle />
-          Continue with Google
-        </Button>
+        <form className="w-full">
+          <Button
+            className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+            variant="outline"
+          >
+            <FaGoogle />
+            Continue with Google
+          </Button>
+        </form>
 
         <form
           onSubmit={e => {
-            e.preventDefault()
-            handleSignInViaGithub()
+            handleSignInViaGithub(e)
           }}
+          className="w-full"
         >
           <Button
             className="flex w-full items-center gap-3 bg-transparent text-stone-300"

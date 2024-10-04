@@ -1,8 +1,8 @@
 - [ ] fix auth logic
     - [x] handle set session cookie on login correctly
-    - [ ] test is_first_login logic
-    - [ ] add `/callback` route to handle OAuth2 callback
-    - [ ] add `github` OAuth2 strategy
+    - [x] test is_first_login logic
+    - [x] add `/callback` route to handle OAuth2 callback
+    - [x] add `github` OAuth2 strategy
     - [ ] add `google` OAuth2 strategy
 
 - https://www.youtube.com/watch?v=XkOXNlHJP6M&t=2457s

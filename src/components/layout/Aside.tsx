@@ -1,21 +1,20 @@
 'use client'
 
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { HiLogin } from 'react-icons/hi'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
-
-import { Button } from '@/components/ui/button'
 import { UserMenu } from '@/components/UserMenu'
+import LogoutBtn from '@/components/LogoutBtn'
 
 export default function Aside() {
-  const router = useRouter()
-  const { user, isLoading } = useAuthHook()
+  const { user } = useAuthHook()
 
   return (
     <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
-      <a href="/pstrackapp/public">
+      <a
+        href="/"
+        className="mx-auto"
+      >
         <Image
           src="/icon-white.png"
           width={60}
@@ -26,19 +25,7 @@ export default function Aside() {
       </a>
 
       <div className="flex items-center justify-center">
-        {!!user ? (
-          <UserMenu />
-        ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-transparent"
-            onClick={() => router.push('/auth')}
-            disabled={isLoading}
-          >
-            <HiLogin size="15" />
-          </Button>
-        )}
+        {!!user ? <UserMenu /> : <LogoutBtn />}
       </div>
     </aside>
   )
