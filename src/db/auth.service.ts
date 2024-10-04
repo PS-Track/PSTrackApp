@@ -26,7 +26,7 @@ export async function signUpViaEmailAndPassword(email: string, password: string)
 
     if (updateError) throw updateError
   }
-  console.log('signUpViaEmailAndPassword', data)
+
   return { data }
 }
 
@@ -41,20 +41,6 @@ export async function loginViaEmailAndPassword(email: string, password: string) 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
-  })
-  if (error) throw error
-
-  return { data }
-}
-
-export async function loginViaGithub() {
-  const supabase = createClient()
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-      redirectTo: process.env.NEXT_PUBLIC_BASE_URL,
-    },
   })
   if (error) throw error
 
@@ -91,6 +77,7 @@ export async function updateUserMetadata(userId: string, userMetaData: UserMetad
   return { data }
 }
 
+// todo
 export async function loginViaMagicLink(email: string) {
   const supabase = createClient()
 

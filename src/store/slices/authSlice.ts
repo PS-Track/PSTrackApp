@@ -14,10 +14,12 @@ interface AuthState {
   user: User | null
   session: Session | null
   isLoading: boolean
-  isLoadingOtp: boolean
   error: string | null
 }
 
+/**
+ * Sign up a new user with their email and password.
+ **/
 export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
   'auth/siginUpWithEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
@@ -26,6 +28,9 @@ export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
   }
 )
 
+/**
+ * Log in a user with their email and password.
+ **/
 export const loginViaEmailAndPasswordAsync = createAsyncThunk(
   'auth/loginViaEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
@@ -34,6 +39,7 @@ export const loginViaEmailAndPasswordAsync = createAsyncThunk(
   }
 )
 
+// todo
 export const loginViaMagicLinkAsync = createAsyncThunk(
   'auth/loginViaMagicLink',
   async ({ email }: { email: string }) => {
@@ -42,10 +48,16 @@ export const loginViaMagicLinkAsync = createAsyncThunk(
   }
 )
 
+/**
+ * Log out the currently authenticated user.
+ **/
 export const logoutAsync = createAsyncThunk('auth/logout', async () => {
   await logOut()
 })
 
+/**
+ * Update user metadata.
+ **/
 export const updateUserInfoAsync = createAsyncThunk<
   { user: User },
   {

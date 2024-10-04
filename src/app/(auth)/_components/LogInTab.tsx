@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { signInViaGithub } from '@/actions/handle_oauth_action'
 
 type FormData = {
   email: string
@@ -51,6 +52,10 @@ export default function LogInTab() {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
+  }
+
+  const handleSignInViaGithub = async () => {
+    await signInViaGithub()
   }
 
   return (
@@ -119,29 +124,37 @@ export default function LogInTab() {
             </Label>
           </div>
         </CardContent>
+      </form>
 
-        <CardFooter className="flex flex-col gap-4">
-          <Button
-            className="w-full"
-            variant="default"
-            disabled={isLoading}
-          >
-            Login
-          </Button>
+      <CardFooter className="flex flex-col gap-4">
+        <Button
+          className="w-full"
+          variant="default"
+          disabled={isLoading}
+        >
+          Login
+        </Button>
 
-          <div className="flex w-full items-center justify-center space-x-2">
-            <hr className="w-full border-stone-300" />
-            <span className="text-nowrap text-xs uppercase text-stone-300">Or continue with</span>
-            <hr className="w-full border-stone-300" />
-          </div>
-          <Button
-            className="flex w-full items-center gap-3 bg-transparent text-stone-300"
-            variant="outline"
-          >
-            <FaGoogle />
-            Continue with Google
-          </Button>
+        <div className="flex w-full items-center justify-center space-x-2">
+          <hr className="w-full border-stone-300" />
+          <span className="text-nowrap text-xs uppercase text-stone-300">Or continue with</span>
+          <hr className="w-full border-stone-300" />
+        </div>
 
+        <Button
+          className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+          variant="outline"
+        >
+          <FaGoogle />
+          Continue with Google
+        </Button>
+
+        <form
+          onSubmit={e => {
+            e.preventDefault()
+            handleSignInViaGithub()
+          }}
+        >
           <Button
             className="flex w-full items-center gap-3 bg-transparent text-stone-300"
             variant="outline"
@@ -149,8 +162,8 @@ export default function LogInTab() {
             <FaGithub />
             <span>Continue with GitHub</span>
           </Button>
-        </CardFooter>
-      </form>
+        </form>
+      </CardFooter>
     </Card>
   )
 }
