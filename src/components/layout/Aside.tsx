@@ -3,26 +3,27 @@
 import Image from 'next/image'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
-import { UserMenu } from '@/components/UserMenu'
+
 import LogoutBtn from '@/components/LogoutBtn'
+import { UserMenu } from '@/components/UserMenu'
+import Navigation from '@/components/layout/Navigation'
 
 export default function Aside() {
   const { user } = useAuthHook()
 
   return (
     <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
-      <a
-        href="/"
-        className="mx-auto"
-      >
+      <div className="mx-auto">
         <Image
           src="/icon-white.png"
           width={60}
           height={60}
-          alt=""
+          alt="PSTrack Logo"
           className="aspect-square"
         />
-      </a>
+      </div>
+
+      <Navigation />
 
       <div className="flex items-center justify-center">
         {!!user ? <UserMenu /> : <LogoutBtn />}

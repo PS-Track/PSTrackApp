@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
 
@@ -15,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function UserMenu() {
+  const router = useRouter()
   const { user, handleLogOut, isLoading } = useAuthHook()
 
   return (
@@ -39,11 +41,10 @@ export function UserMenu() {
         <DropdownMenuLabel>Hi, {user?.user_metadata.first_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push('/settings')}
+          >
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>

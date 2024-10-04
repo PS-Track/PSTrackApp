@@ -62,7 +62,7 @@ const leetCoders = ['@Hüsam', '@Kholoud', '@Majd', '@Mohammed', '@Nour', '@Omar
 export default function Home() {
   return (
     <>
-      <Table className="rounded-lg bg-[#17171799]">
+      <Table className="bg-gray rounded-lg">
         <TableHeader className="overflow-hidden rounded-t-md">
           <TableRow className="sticky top-0 flex h-20 items-center overflow-hidden rounded-t-md border-b border-[#2f2f2f] hover:overflow-hidden hover:bg-[#2f2f2f]">
             {/** LeetCoders **/}
