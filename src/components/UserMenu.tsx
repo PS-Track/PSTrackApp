@@ -19,11 +19,14 @@ export function UserMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger
+        className=""
+        asChild
+      >
         <Button
           size="sm"
           variant="outline"
-          className="h-[35px] w-[35px] overflow-hidden rounded-full bg-transparent p-0"
+          className="h-[35px] w-[35px] overflow-hidden rounded-full p-0"
         >
           <Image
             src="/01.png"
@@ -34,7 +37,7 @@ export function UserMenu() {
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="bg-dark w-56 text-neutral-100">
         <DropdownMenuLabel>Hi, {user?.user_metadata.first_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

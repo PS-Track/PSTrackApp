@@ -73,7 +73,6 @@ export async function updateUserMetadata(userId: string, userMetaData: UserMetad
   })
   if (error) throw error
 
-  console.log('updateUserMetadata', data)
   return { data }
 }
 

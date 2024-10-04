@@ -9,13 +9,7 @@ import {
   updateUserMetadata,
 } from '@/db/auth.service'
 import { UserMetadataI } from '@/types/User.interface'
-
-interface AuthState {
-  user: User | null
-  session: Session | null
-  isLoading: boolean
-  error: string | null
-}
+import { AuthState } from '@/types/Auth.interface'
 
 /**
  * Sign up a new user with their email and password.
