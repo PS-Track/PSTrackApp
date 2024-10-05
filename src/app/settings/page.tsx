@@ -1,7 +1,7 @@
 'use client'
 
 import * as z from 'zod'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -23,13 +23,15 @@ import {
 } from '@/components/ui/form'
 
 export default function Page() {
-  const [profilePicture, setProfilePicture] = useState<string | null>(null)
+  const [avatarPic, setAvatarPic] = useState<string | null>(null)
+  const avatarInputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       displayName: '',
       username: '',
+      avatar: undefined,
       email: '',
       bio: '',
       twitter: '',
@@ -38,19 +40,22 @@ export default function Page() {
     },
   })
 
-  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setProfilePicture(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      const filePreview = URL.createObjectURL(file)
+      setAvatarPic(filePreview)
+      form.setValue('avatar', file) // Correcting the 'name' parameter to 'avatar'
     }
   }
 
+  const handleCustomButtonClick = () => {
+    avatarInputRef.current?.click()
+  }
+
   const deleteProfilePicture = () => {
-    setProfilePicture(null)
+    setAvatarPic(null)
+    form.setValue('avatar', undefined) // Resetting the file field
   }
 
   const onSubmit = (values: z.infer<typeof profileSchema>) => {
@@ -70,7 +75,7 @@ export default function Page() {
               <div className="flex items-center space-x-4">
                 <Avatar className="h-12 w-12">
                   <AvatarImage
-                    src={profilePicture || ''}
+                    src={avatarPic || ''}
                     alt="Profile picture"
                   />
                   <AvatarFallback>CN</AvatarFallback>
@@ -84,18 +89,20 @@ export default function Page() {
                       type="button"
                       variant="outline"
                       className="mr-2"
+                      onClick={handleCustomButtonClick} // Added the button click handler
                     >
                       Upload new picture
                     </Button>
                   </label>
-                  <Input
+                  <input
                     id="picture"
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={handleProfilePictureChange}
+                    ref={avatarInputRef}
+                    onChange={handleFileChange}
                   />
-                  {profilePicture && (
+                  {avatarPic && (
                     <Button
                       type="button"
                       variant="ghost"
