@@ -106,6 +106,7 @@ export default function LogInTab() {
                 onClick={togglePasswordVisibility}
                 size="sm"
                 variant="ghost"
+                type="button"
                 className="absolute right-0 top-1/2 flex -translate-y-1/2 transform items-center border-none bg-transparent px-3 text-stone-300 hover:bg-transparent"
               >
                 {showPassword ? (
