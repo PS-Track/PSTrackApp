@@ -42,10 +42,8 @@ export type Database = {
           display_name: string | null
           email: string
           id: string
-          is_first_login: boolean | null
           linkedin: string | null
           phone: string | null
-          phone_country_code: string | null
           twitter: string | null
           username: string | null
           website: string | null
@@ -57,10 +55,8 @@ export type Database = {
           display_name?: string | null
           email: string
           id: string
-          is_first_login?: boolean | null
           linkedin?: string | null
           phone?: string | null
-          phone_country_code?: string | null
           twitter?: string | null
           username?: string | null
           website?: string | null
@@ -72,10 +68,8 @@ export type Database = {
           display_name?: string | null
           email?: string
           id?: string
-          is_first_login?: boolean | null
           linkedin?: string | null
           phone?: string | null
-          phone_country_code?: string | null
           twitter?: string | null
           username?: string | null
           website?: string | null

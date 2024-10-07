@@ -3,17 +3,17 @@ import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { useDialogHook } from '@/hooks/generic/useDialogHook'
-import { UserMetadataI } from '@/types/User.interface'
+import { UpdateUserDataI } from '@/types/User.interface'
 import { createClient } from '@/db/supabase/client'
 
 import {
-  setUser,
-  setSession,
-  logoutAsync,
-  updateUserInfoAsync,
   loginViaEmailAndPasswordAsync,
+  logoutAsync,
+  setSession,
+  setUser,
   siginUpWithEmailAndPasswordAsync,
 } from '@/store/slices/authSlice'
+import { updateUserFirstLogin } from '@/db/auth.service'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -91,6 +91,8 @@ export const useAuthHook = () => {
   useEffect(() => {
     if (user?.user_metadata?.is_first_login) openDialog()
     else closeDialog()
+
+    console.log('user', user)
   }, [closeDialog, openDialog, user?.user_metadata?.is_first_login])
 
   /**
@@ -140,17 +142,22 @@ export const useAuthHook = () => {
   /**
    * Handle updating user metadata
    **/
-  const handleUpdateUserMetadata = async (userId: string, userMetaData: UserMetadataI) => {
-    console.log('dispatching updateUserInfoAsync', userId, userMetaData)
-    await dispatch(
-      updateUserInfoAsync({
-        userId,
-        userInfo: userMetaData,
-      })
-    )
-      // Unwrap the action to get the result or throw an error
-      .unwrap()
-      .then(() => closeDialog())
+  // const handleUpdateUserMetadata = async (userId: string, userMetaData: UserMetadataI) => {
+  //   await dispatch(
+  //     updateUserInfoAsync({
+  //       userId,
+  //       userInfo: userMetaData,
+  //     })
+  //   )
+  //     // Unwrap the action to get the result or throw an error
+  //     .unwrap()
+  //     .then(() => closeDialog())
+  // }
+
+  const handleUpdateUserFirstLogin = async (userId: string, userData: UpdateUserDataI) => {
+    const { data } = await updateUserFirstLogin({ userId, userData })
+    dispatch(setUser(data))
+    console.log('handleUpdateUserFirstLogin', data)
   }
 
   return {
@@ -160,6 +167,6 @@ export const useAuthHook = () => {
     handleRegister,
     handleLoginViaEmailAndPassword,
     handleLogOut,
-    handleUpdateUserMetadata,
+    handleUpdateUserFirstLogin,
   }
 }
