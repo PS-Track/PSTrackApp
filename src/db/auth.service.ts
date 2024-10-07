@@ -57,6 +57,7 @@ export async function logOut() {
   revalidatePath('/', 'layout')
 }
 
+// todo: update the 'updateUseMetadata' function to use the 'updateUserMetadataAsync' action
 /**
  * Update the user metadata for a user.
  * @param userId The user's ID.

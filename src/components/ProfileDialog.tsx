@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
-import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
@@ -16,37 +15,45 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useCountryCodesHook } from '@/hooks/generic/useCountryCodesHook'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import React from 'react'
 
 export default function ProfileDialog() {
-  const { user, isLoading, handleUpdateUserMetadata } = useAuthHook()
+  const { user, isLoading } = useAuthHook()
+  const { countryCodes, isLoading: isLoadingCodes } = useCountryCodesHook()
   const { isOpen } = useDialogHook()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<z.infer<typeof firstLoginFormSchema>>({
+  const form = useForm<z.infer<typeof firstLoginFormSchema>>({
     resolver: zodResolver(firstLoginFormSchema),
     defaultValues: {
       username: '',
-      first_name: '',
-      last_name: '',
-      email: '',
+      display_name: '',
+      phone: '',
+      phoneCountryCode: '',
     },
   })
 
-  // Set the email value from the user object
-  useEffect(() => {
-    if (user?.user_metadata?.email) setValue('email', user.user_metadata.email)
-  }, [user, setValue])
-
   async function onSubmit(values: z.infer<typeof firstLoginFormSchema>) {
     if (!user) return
-
-    await handleUpdateUserMetadata(user.id, { ...values })
+    console.log('values', values)
+    // await handleUpdateUserMetadata(user.id, { ...values })
   }
 
   if (isLoading) return null // todo add loading spinner
@@ -54,89 +61,122 @@ export default function ProfileDialog() {
   return (
     <Dialog open={isOpen}>
       <DialogContent
-        className="border-[#27272a] bg-[#09090b] sm:max-w-[425px]"
+        className="sm:max-w-[425px]"
         onCloseAutoFocus={event => event.preventDefault()}
         onEscapeKeyDown={event => event.preventDefault()}
         onPointerDownOutside={event => event.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>Welcome to the PSTrack app 🎉</DialogTitle>
-          <DialogDescription className="text-sm">
+          <DialogDescription>
             Please fill in your details to complete your profile.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div>
-                <Label htmlFor="first_name">First Name</Label>
-                <Input
-                  id="first_name"
-                  className="col-span-3 border-[#27272a]"
-                  {...register('first_name', { required: 'First name is required' })}
-                />
-                {errors.first_name && (
-                  <span className="col-span-4 text-center text-sm text-red-500">
-                    {errors.first_name.message}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="last_name">Last Name</Label>
-                <Input
-                  id="last_name"
-                  className="col-span-3 border-[#27272a]"
-                  {...register('last_name', { required: 'Last name is required' })}
-                />
-                {errors.last_name && (
-                  <span className="col-span-4 text-center text-sm text-red-500">
-                    {errors.last_name.message}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="items-center gap-4">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                placeholder="Will be displayed on the table"
-                className="col-span-3 border-[#27272a]"
-                {...register('username', { required: 'Username is required' })}
-              />
-              {errors.username && (
-                <span className="col-span-4 text-center text-sm text-red-500">
-                  {errors.username.message}
-                </span>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="display_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your display name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
+            />
 
-            <div className="items-center gap-4">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                className="col-span-3 border-[#27272a]"
-                {...register('email', { required: 'Email is required' })}
-              />
-              {errors.email && (
-                <span className="col-span-4 text-center text-sm text-red-500">
-                  {errors.email.message}
-                </span>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Will be displayed on the table"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
-          </div>
+            />
 
-          <DialogFooter>
-            <Button
-              disabled={isLoading}
-              type="submit"
-            >
-              Done
-            </Button>
-          </DialogFooter>
-        </form>
+            <FormItem>
+              <FormLabel>Phone number</FormLabel>
+              <div className="flex gap-3">
+                <FormField
+                  name="phoneCountryCode"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger className="w-[100px]">
+                          <SelectValue placeholder="Code" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoadingCodes ? (
+                          <SelectItem
+                            value="loading"
+                            disabled
+                          >
+                            Loading...
+                          </SelectItem>
+                        ) : (
+                          countryCodes.map((code, index) => (
+                            <SelectItem
+                              key={index + code.value} // Use a unique key
+                              value={code.value}
+                            >
+                              {code.value}
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter phone number"
+                        className="flex-1"
+                      />
+                    </FormControl>
+                  )}
+                />
+              </div>
+              <FormDescription>
+                It must be the same number you used to join the community.
+              </FormDescription>
+              <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
+            </FormItem>
+
+            <DialogFooter>
+              <Button
+                type="submit"
+                disabled={isLoading}
+              >
+                Done
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

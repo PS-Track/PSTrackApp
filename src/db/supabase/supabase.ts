@@ -36,31 +36,49 @@ export type Database = {
     Tables: {
       users: {
         Row: {
-          avatar_url: string | null
+          avatar: string | null
+          bio: string | null
           created_at: string | null
+          display_name: string | null
           email: string
-          first_name: string | null
           id: string
-          last_name: string | null
+          is_first_login: boolean | null
+          linkedin: string | null
+          phone: string | null
+          phone_country_code: string | null
+          twitter: string | null
           username: string | null
+          website: string | null
         }
         Insert: {
-          avatar_url?: string | null
+          avatar?: string | null
+          bio?: string | null
           created_at?: string | null
+          display_name?: string | null
           email: string
-          first_name?: string | null
           id: string
-          last_name?: string | null
+          is_first_login?: boolean | null
+          linkedin?: string | null
+          phone?: string | null
+          phone_country_code?: string | null
+          twitter?: string | null
           username?: string | null
+          website?: string | null
         }
         Update: {
-          avatar_url?: string | null
+          avatar?: string | null
+          bio?: string | null
           created_at?: string | null
+          display_name?: string | null
           email?: string
-          first_name?: string | null
           id?: string
-          last_name?: string | null
+          is_first_login?: boolean | null
+          linkedin?: string | null
+          phone?: string | null
+          phone_country_code?: string | null
+          twitter?: string | null
           username?: string | null
+          website?: string | null
         }
         Relationships: [
           {
