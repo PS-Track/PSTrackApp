@@ -12,8 +12,8 @@ export default function LogoutBtn() {
   return (
     <Button
       size="icon"
-      variant="outline"
-      className="h-[40px] w-[40px] overflow-hidden rounded-full p-0"
+      variant="ghost"
+      className="h-[30px] w-[30px] overflow-hidden rounded-full p-0"
       onClick={() => router.push('/auth')}
       disabled={isLoading}
     >

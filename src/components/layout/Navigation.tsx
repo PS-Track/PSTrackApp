@@ -12,8 +12,8 @@ export default function Navigation() {
     <div className="flex w-full flex-1 justify-center pt-5">
       <Button
         size="icon"
-        variant="outline"
-        className="hover:bg-gray mx-auto h-[40px] w-[40px] overflow-hidden rounded-full p-0"
+        variant="ghost"
+        className="mx-auto h-[35px] w-[35px] overflow-hidden rounded-full p-0 hover:bg-transparent"
         onClick={() => router.push('/')}
       >
         <CiViewTable />
