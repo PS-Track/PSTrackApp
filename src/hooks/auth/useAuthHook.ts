@@ -92,7 +92,7 @@ export const useAuthHook = () => {
     if (user?.user_metadata?.is_first_login) openDialog()
     else closeDialog()
 
-    console.log('user', user)
+    // console.log('user', user) // todo remove this
   }, [closeDialog, openDialog, user?.user_metadata?.is_first_login])
 
   /**
