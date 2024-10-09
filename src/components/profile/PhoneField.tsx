@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { useCountryCodesHook } from '@/hooks/generic/useCountryCodesHook'
+import { useCountryCodesHook } from '@/hooks/global/useCountryCodesHook'
 
 export default function PhoneField({
   form,
