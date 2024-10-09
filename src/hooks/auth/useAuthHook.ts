@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useDialogHook } from '@/hooks/generic/useDialogHook'
+import { useDialogHook } from '@/hooks/global/useDialogHook'
 import { UserMetadataI } from '@/types/User.interface'
 import { createClient } from '@/db/supabase/client'
 
