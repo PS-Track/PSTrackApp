@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useAuthHook } from '@/hooks/auth/useAuthHook'
-import { useDialogHook } from '@/hooks/generic/useDialogHook'
+import { useDialogHook } from '@/hooks/global/useDialogHook'
 import { firstLoginFormSchema } from '@/validation/firstLoginForm.schema'
 
 import {
@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useCountryCodesHook } from '@/hooks/generic/useCountryCodesHook'
+import { useCountryCodesHook } from '@/hooks/global/useCountryCodesHook'
 import {
   Select,
   SelectContent,
@@ -37,7 +37,7 @@ import React from 'react'
 
 export default function ProfileDialog() {
   const { user, isLoading, handleUpdateUserFirstLogin } = useAuthHook()
-  const { countryCodes, isLoading: isLoadingCodes } = useCountryCodesHook()
+  const { countryOptions, isLoading: isLoadingCodes } = useCountryCodesHook()
   const { isOpen } = useDialogHook()
 
   const form = useForm<z.infer<typeof firstLoginFormSchema>>({
@@ -54,6 +54,11 @@ export default function ProfileDialog() {
     if (!user) return
     const { phoneCountryCode, phone, ...restValues } = values
     const formattedPhone = `${phoneCountryCode}${phone}`
+
+    console.log('Submitting form with values:', {
+      ...restValues,
+      phone: formattedPhone,
+    })
 
     await handleUpdateUserFirstLogin(user.id, {
       ...restValues,
@@ -131,23 +136,16 @@ export default function ProfileDialog() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {isLoadingCodes ? (
-                          <SelectItem
-                            value="loading"
-                            disabled
-                          >
-                            Loading...
-                          </SelectItem>
-                        ) : (
-                          countryCodes.map((code, index) => (
-                            <SelectItem
-                              key={index + code.value} // Use a unique key
-                              value={code.value}
-                            >
-                              {code.label}
-                            </SelectItem>
-                          ))
-                        )}
+                        {isLoadingCodes
+                          ? null
+                          : countryOptions?.map(option => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
                       </SelectContent>
                     </Select>
                   )}

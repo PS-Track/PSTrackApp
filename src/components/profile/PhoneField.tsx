@@ -1,7 +1,6 @@
 import React from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
-
 import { profileSchema } from '@/validation/profileForm.schema'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import {
@@ -12,15 +11,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { useCountryCodesHook } from '@/hooks/generic/useCountryCodesHook'
+import { useCountryCodesHook } from '@/hooks/global/useCountryCodesHook'
 
 export default function PhoneField({
   form,
 }: {
   form: UseFormReturn<z.infer<typeof profileSchema>>
 }) {
-  const { countryCodes, isLoading } = useCountryCodesHook()
-
+  const { countryOptions, isLoading } = useCountryCodesHook()
   return (
     <FormItem>
       <FormLabel>Phone number</FormLabel>
@@ -31,28 +29,21 @@ export default function PhoneField({
           render={({ field }) => (
             <Select onValueChange={field.onChange}>
               <FormControl>
-                <SelectTrigger className="w-[150px]">
+                <SelectTrigger className="w-[200px]">
                   <SelectValue placeholder="Code" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {isLoading ? (
-                  <SelectItem
-                    value="loading"
-                    disabled
-                  >
-                    Loading...
-                  </SelectItem>
-                ) : (
-                  countryCodes.map((code, index) => (
-                    <SelectItem
-                      key={index + code.value} // Use a unique key
-                      value={code.value}
-                    >
-                      {code.label}
-                    </SelectItem>
-                  ))
-                )}
+                {isLoading
+                  ? null
+                  : countryOptions?.map(option => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
               </SelectContent>
             </Select>
           )}

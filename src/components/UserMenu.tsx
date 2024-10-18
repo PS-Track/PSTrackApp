@@ -38,7 +38,7 @@ export function UserMenu() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56 bg-dark text-neutral-100">
-        <DropdownMenuLabel>Hi, {user?.user_metadata.name}</DropdownMenuLabel>
+        <DropdownMenuLabel>Hi, {user?.user_metadata.display_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem

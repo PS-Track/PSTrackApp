@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Session, User } from '@supabase/supabase-js'
 
-import {
-  loginViaEmailAndPassword,
-  loginViaMagicLink,
-  logOut,
-  signUpViaEmailAndPassword,
-} from '@/db/auth.service'
+import { login, loginViaMagicLink, logOut, register } from '@/db/auth.service'
 import { AuthState } from '@/types/Auth.interface'
 
 /**
@@ -15,7 +10,7 @@ import { AuthState } from '@/types/Auth.interface'
 export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
   'auth/siginUpWithEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data } = await signUpViaEmailAndPassword(email, password)
+    const { data } = await register(email, password)
     return { user: data?.user, session: data?.session }
   }
 )
@@ -26,7 +21,7 @@ export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
 export const loginViaEmailAndPasswordAsync = createAsyncThunk(
   'auth/loginViaEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data } = await loginViaEmailAndPassword(email, password)
+    const { data } = await login(email, password)
     return { user: data?.user, session: data?.session }
   }
 )

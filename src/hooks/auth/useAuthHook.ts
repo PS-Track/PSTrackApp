@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useDialogHook } from '@/hooks/generic/useDialogHook'
-import { UpdateUserDataI } from '@/types/User.interface'
+import { useDialogHook } from '@/hooks/global/useDialogHook'
 import { createClient } from '@/db/supabase/client'
 
 import {
@@ -13,6 +12,7 @@ import {
   setUser,
   siginUpWithEmailAndPasswordAsync,
 } from '@/store/slices/authSlice'
+import { UpdateUserDataI } from '@/types/User.interface'
 import { updateUserFirstLogin } from '@/db/auth.service'
 
 export const useAuthHook = () => {
