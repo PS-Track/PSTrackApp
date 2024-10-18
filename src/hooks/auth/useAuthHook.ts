@@ -3,17 +3,17 @@ import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { useDialogHook } from '@/hooks/global/useDialogHook'
-import { UserMetadataI } from '@/types/User.interface'
 import { createClient } from '@/db/supabase/client'
 
 import {
-  setUser,
-  setSession,
-  logoutAsync,
-  updateUserInfoAsync,
   loginViaEmailAndPasswordAsync,
+  logoutAsync,
+  setSession,
+  setUser,
   siginUpWithEmailAndPasswordAsync,
 } from '@/store/slices/authSlice'
+import { UpdateUserDataI } from '@/types/User.interface'
+import { updateUserFirstLogin } from '@/db/auth.service'
 
 export const useAuthHook = () => {
   const router = useRouter()
@@ -30,17 +30,14 @@ export const useAuthHook = () => {
    * Set up an auth listener to update the Redux store with the latest user data
    **/
   useEffect(() => {
-    // If the listener is already set up, do nothing
     if (hasSetupListener.current) return
 
     const supabase = createClient()
 
     // Set up a listener for authentication state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      // Update the session in the Redux store
       dispatch(setSession(session))
       if (session) {
-        // If a session exists, fetch the latest user data
         const {
           data: { user },
           error,
@@ -48,21 +45,16 @@ export const useAuthHook = () => {
         if (error) {
           console.error('Error fetching user:', error)
         } else {
-          // Update the user in the Redux store
           dispatch(setUser(user ?? null))
         }
       } else {
-        // If no session exists, set the user to null
         dispatch(setUser(null))
       }
     })
 
-    // Get the current session on component mount
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      // Update the session in the Redux store
       dispatch(setSession(session))
       if (session) {
-        // Fetch the latest user data if a session exists
         const {
           data: { user },
           error,
@@ -70,11 +62,9 @@ export const useAuthHook = () => {
         if (error) {
           console.error('Error fetching user:', error)
         } else {
-          // Update the user in the Redux store
           dispatch(setUser(user ?? null))
         }
       } else {
-        // Set the user to null if no session exists
         dispatch(setUser(null))
       }
     })
@@ -91,6 +81,8 @@ export const useAuthHook = () => {
   useEffect(() => {
     if (user?.user_metadata?.is_first_login) openDialog()
     else closeDialog()
+
+    console.log('user', user) // todo remove this
   }, [closeDialog, openDialog, user?.user_metadata?.is_first_login])
 
   /**
@@ -131,26 +123,21 @@ export const useAuthHook = () => {
 
   /**
    * Handle user logout
-   **/
+   */
   const handleLogOut = async () => {
     await dispatch(logoutAsync())
     router.push('/auth')
   }
 
   /**
-   * Handle updating user metadata
-   **/
-  const handleUpdateUserMetadata = async (userId: string, userMetaData: UserMetadataI) => {
-    console.log('dispatching updateUserInfoAsync', userId, userMetaData)
-    await dispatch(
-      updateUserInfoAsync({
-        userId,
-        userInfo: userMetaData,
-      })
-    )
-      // Unwrap the action to get the result or throw an error
-      .unwrap()
-      .then(() => closeDialog())
+   * Update user metadata and set `is_first_login` to `false`
+   * @param userId The user's ID
+   * @param userData The user metadata to update
+   */
+  const handleUpdateUserFirstLogin = async (userId: string, userData: UpdateUserDataI) => {
+    const { data } = await updateUserFirstLogin({ userId, userData })
+    dispatch(setUser(data.user))
+    console.log('handleUpdateUserFirstLogin', data)
   }
 
   return {
@@ -160,6 +147,6 @@ export const useAuthHook = () => {
     handleRegister,
     handleLoginViaEmailAndPassword,
     handleLogOut,
-    handleUpdateUserMetadata,
+    handleUpdateUserFirstLogin,
   }
 }

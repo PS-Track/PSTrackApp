@@ -1,14 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Session, User } from '@supabase/supabase-js'
 
-import {
-  loginViaEmailAndPassword,
-  loginViaMagicLink,
-  logOut,
-  signUpViaEmailAndPassword,
-  updateUserMetadata,
-} from '@/db/auth.service'
-import { UserMetadataI } from '@/types/User.interface'
+import { login, loginViaMagicLink, logOut, register } from '@/db/auth.service'
 import { AuthState } from '@/types/Auth.interface'
 
 /**
@@ -17,7 +10,7 @@ import { AuthState } from '@/types/Auth.interface'
 export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
   'auth/siginUpWithEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data } = await signUpViaEmailAndPassword(email, password)
+    const { data } = await register(email, password)
     return { user: data?.user, session: data?.session }
   }
 )
@@ -28,7 +21,7 @@ export const siginUpWithEmailAndPasswordAsync = createAsyncThunk(
 export const loginViaEmailAndPasswordAsync = createAsyncThunk(
   'auth/loginViaEmailAndPassword',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data } = await loginViaEmailAndPassword(email, password)
+    const { data } = await login(email, password)
     return { user: data?.user, session: data?.session }
   }
 )
@@ -52,37 +45,37 @@ export const logoutAsync = createAsyncThunk('auth/logout', async () => {
 /**
  * Update user metadata.
  **/
-export const updateUserInfoAsync = createAsyncThunk<
-  { user: User },
-  {
-    userId: string
-    userInfo: UserMetadataI
-  },
-  {
-    rejectValue: string
-  }
->(
-  'auth/updateUserInfo',
-  async (
-    {
-      userId,
-      userInfo,
-    }: {
-      userId: string
-      userInfo: UserMetadataI
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const { data } = await updateUserMetadata(userId, userInfo)
-      setUser(data.user)
-      return { user: data.user }
-    } catch (error) {
-      if (error instanceof Error) return rejectWithValue(error.message)
-      return rejectWithValue('An unknown error occurred')
-    }
-  }
-)
+// export const updateUserInfoAsync = createAsyncThunk<
+//   { user: User },
+//   {
+//     userId: string
+//     userInfo: UserMetadataI
+//   },
+//   {
+//     rejectValue: string
+//   }
+// >(
+//   'auth/updateUserInfo',
+//   async (
+//     {
+//       userId,
+//       userInfo,
+//     }: {
+//       userId: string
+//       userInfo: UserMetadataI
+//     },
+//     { rejectWithValue }
+//   ) => {
+//     try {
+//       const { data } = await updateUserMetadata(userId, userInfo)
+//       setUser(data.user)
+//       return { user: data.user }
+//     } catch (error) {
+//       if (error instanceof Error) return rejectWithValue(error.message)
+//       return rejectWithValue('An unknown error occurred')
+//     }
+//   }
+// )
 
 const authSlice = createSlice({
   name: 'auth',
@@ -135,18 +128,18 @@ const authSlice = createSlice({
         state.error = action.error.message as string
       })
       /** Update User Info */
-      .addCase(updateUserInfoAsync.pending, state => {
-        state.isLoading = true
-        state.error = null
-      })
-      .addCase(updateUserInfoAsync.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.user = action.payload.user
-      })
-      .addCase(updateUserInfoAsync.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.payload as string
-      })
+      // .addCase(updateUserInfoAsync.pending, state => {
+      //   state.isLoading = true
+      //   state.error = null
+      // })
+      // .addCase(updateUserInfoAsync.fulfilled, (state, action) => {
+      //   state.isLoading = false
+      //   state.user = action.payload.user
+      // })
+      // .addCase(updateUserInfoAsync.rejected, (state, action) => {
+      //   state.isLoading = false
+      //   state.error = action.payload as string
+      // })
       /** LogIn Via Magic Link */
       .addCase(loginViaMagicLinkAsync.pending, state => {
         state.isLoading = true

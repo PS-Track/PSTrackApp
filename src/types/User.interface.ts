@@ -6,17 +6,23 @@ export interface UserMetadataI {
   avatar_url?: string
 }
 
-export interface UserI {
-  id: string
-  display_name?: string
+export interface UpdateUserDataI {
+  display_name: string
   username: string
+  phone: string
+}
+
+export interface UserI {
+  avatar: string | null
+  bio: string | null
+  created_at: string | null
+  display_name: string | null
   email: string
-  phone?: string
-  avatar?: string
-  bio?: string
-  linkedin?: string
-  twitter?: string
-  website?: string
-  is_suspended: boolean
-  group_id?: string
+  id: string
+  is_first_login: boolean | null
+  linkedin: string | null
+  phone: string | null
+  twitter: string | null
+  username: string | null
+  website: string | null
 }

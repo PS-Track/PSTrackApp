@@ -81,7 +81,7 @@ export default function LogInTab() {
             </Label>
             <Input
               id="email"
-              className="border-[#27272a] text-stone-300"
+              className="text-stone-300 border-[#27272a]"
               {...register('email', { required: 'Email is required' })}
             />
             {errors.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
@@ -99,7 +99,7 @@ export default function LogInTab() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                className="relative border-[#27272a] pr-10 text-stone-300"
+                className="text-stone-300 relative border-[#27272a] pr-10"
                 {...register('password', { required: 'Password is required' })}
               />
               <Button
@@ -107,7 +107,7 @@ export default function LogInTab() {
                 size="sm"
                 variant="ghost"
                 type="button"
-                className="absolute right-0 top-1/2 flex -translate-y-1/2 transform items-center border-none bg-transparent px-3 text-stone-300 hover:bg-transparent"
+                className="text-stone-300 absolute right-0 top-1/2 flex -translate-y-1/2 transform items-center border-none bg-transparent px-3 hover:bg-transparent"
               >
                 {showPassword ? (
                   <HiEyeOff className="text-sm text-white" />
@@ -142,19 +142,21 @@ export default function LogInTab() {
           className="w-full"
           variant="default"
           disabled={isLoading}
+          type="submit"
+          onClick={handleSubmit(onLogin)}
         >
           Login
         </Button>
 
         <div className="flex w-full items-center justify-center space-x-2">
-          <hr className="w-full border-stone-300" />
-          <span className="text-nowrap text-xs uppercase text-stone-300">Or continue with</span>
-          <hr className="w-full border-stone-300" />
+          <hr className="border-stone-300 w-full" />
+          <span className="text-stone-300 text-nowrap text-xs uppercase">Or continue with</span>
+          <hr className="border-stone-300 w-full" />
         </div>
 
         <form className="w-full">
           <Button
-            className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+            className="text-stone-300 flex w-full items-center gap-3 bg-transparent"
             variant="outline"
           >
             <FaGoogle />
@@ -169,7 +171,7 @@ export default function LogInTab() {
           className="w-full"
         >
           <Button
-            className="flex w-full items-center gap-3 bg-transparent text-stone-300"
+            className="text-stone-300 flex w-full items-center gap-3 bg-transparent"
             variant="outline"
           >
             <FaGithub />

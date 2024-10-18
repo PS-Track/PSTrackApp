@@ -36,8 +36,8 @@ import {
 import React from 'react'
 
 export default function ProfileDialog() {
-  const { user, isLoading } = useAuthHook()
-  const { countryCodes, isLoading: isLoadingCodes } = useCountryCodesHook()
+  const { user, isLoading, handleUpdateUserFirstLogin } = useAuthHook()
+  const { countryOptions, isLoading: isLoadingCodes } = useCountryCodesHook()
   const { isOpen } = useDialogHook()
 
   const form = useForm<z.infer<typeof firstLoginFormSchema>>({
@@ -52,8 +52,18 @@ export default function ProfileDialog() {
 
   async function onSubmit(values: z.infer<typeof firstLoginFormSchema>) {
     if (!user) return
-    console.log('values', values)
-    // await handleUpdateUserMetadata(user.id, { ...values })
+    const { phoneCountryCode, phone, ...restValues } = values
+    const formattedPhone = `${phoneCountryCode}${phone}`
+
+    console.log('Submitting form with values:', {
+      ...restValues,
+      phone: formattedPhone,
+    })
+
+    await handleUpdateUserFirstLogin(user.id, {
+      ...restValues,
+      phone: formattedPhone,
+    })
   }
 
   if (isLoading) return null // todo add loading spinner
@@ -121,28 +131,21 @@ export default function ProfileDialog() {
                   render={({ field }) => (
                     <Select onValueChange={field.onChange}>
                       <FormControl>
-                        <SelectTrigger className="w-[100px]">
+                        <SelectTrigger className="w-[150px]">
                           <SelectValue placeholder="Code" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {isLoadingCodes ? (
-                          <SelectItem
-                            value="loading"
-                            disabled
-                          >
-                            Loading...
-                          </SelectItem>
-                        ) : (
-                          countryCodes.map((code, index) => (
-                            <SelectItem
-                              key={index + code.value} // Use a unique key
-                              value={code.value}
-                            >
-                              {code.value}
-                            </SelectItem>
-                          ))
-                        )}
+                        {isLoadingCodes
+                          ? null
+                          : countryOptions?.map(option => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
                       </SelectContent>
                     </Select>
                   )}
