@@ -3,6 +3,11 @@
 import { createClient } from '@/db/supabase/server'
 import { redirect } from 'next/navigation'
 
+/**
+ * Signs in the user with GitHub.
+ * @returns A redirect to the GitHub authorization URL.
+ * @throws {Error} If there is an error signing in with GitHub.
+ */
 export const signInViaGithub = async () => {
   const supabase = createClient()
 
