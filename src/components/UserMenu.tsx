@@ -25,12 +25,12 @@ export function UserMenu() {
         <Button
           size="sm"
           variant="outline"
-          className="h-[40px] w-[40px] overflow-hidden rounded-full p-0"
+          className="h-[30px] w-[30px] overflow-hidden rounded-full p-0"
         >
           <Image
             src="/01.png"
-            width={40}
-            height={40}
+            width={30}
+            height={30}
             alt=""
             className="aspect-square object-cover object-center"
           />

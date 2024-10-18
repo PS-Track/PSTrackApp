@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running lint-staged checks..."
+yarn lint-staged
+
+echo "📝 Checking code format..."
+yarn run check-format || (echo "❌ Please run 'yarn format' and commit again 😔" && exit 1)
+
+echo "🔎 Running lint checks..."
+yarn run check-lint || (echo "❌ Please run 'yarn lint' and commit again 🚨" && exit 1)
+
+echo "✅ All checks passed! 🚀✨ Preparing to commit... 🔐"

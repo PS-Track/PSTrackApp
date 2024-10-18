@@ -12,12 +12,12 @@ export default function Aside() {
   const { user } = useAuthHook()
 
   return (
-    <aside className="flex h-screen flex-col justify-between bg-[#09090b] py-3">
+    <aside className="flex h-screen flex-col justify-between bg-gray py-3">
       <div className="mx-auto">
         <Image
           src="/icon-white.png"
-          width={60}
-          height={60}
+          width={40}
+          height={40}
           alt="PSTrack Logo"
           className="aspect-square"
         />
