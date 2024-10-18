@@ -11,12 +11,14 @@
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 		"check-format": "yarn format",
 		"check-lint": "yarn lint",
-		"lint-staged": "lint-staged"
+		"lint-staged": "lint-staged",
+		"tsc": "tsc --noEmit"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx}": [
 			"eslint --fix",
-			"prettier --write"
+			"prettier --write",
+			"tsc --noEmit"
 		],
 		"**/*.{json,md,html,css,scss,mjs}": [
 			"prettier --write"
@@ -54,8 +56,8 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
-		"@types/node": "^20",
-		"@types/react": "^18",
+		"@types/node": "^20.16.12",
+		"@types/react": "^18.3.11",
 		"@types/react-dom": "^18",
 		"eslint": "^8",
 		"eslint-config-next": "14.2.11",
@@ -63,6 +65,6 @@
 		"prettier": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.6",
 		"tailwindcss": "^3.4.1",
-		"typescript": "^5"
+		"typescript": "^5.6.3"
 	}
 }
